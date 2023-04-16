@@ -15,7 +15,7 @@ pattern_points *= unitSize
 # print( make_2D_points().shape)
 # print(make_2D_points())
 
-points2Ds = make_2D_points() # make_2D_points return (10,18,2), float32 np array
+points2Ds = make_2D_points() # make_2D_points return (10,18,2), float32 np array!
 points3Ds = [pattern_points for i in range(10)]
 
 print(points2Ds)
