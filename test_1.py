@@ -4,8 +4,6 @@ import math
 from circle import make_2D_points
 import glob
 
-
-
 # ----------------------------------원 좌표 구하기 위한 코드 --------------------------------------
 
 # Define blob detector - 원 인식할려면 detector 설정해야됨.
@@ -36,17 +34,7 @@ for j in range(10):
 
     # keyPoints는 detector가 원을 감지한 것
     keyPoints = detector.detect(imgInit)
-
-<<<<<<< HEAD
-    x = int(keypoint.pt[0])
-    y = int(keypoint.pt[1])
-    s = keypoint.size
-    r = int(math.floor(s / 2))
-    cv.circle(imgInit, (x, y), r, (256, 200, 0), 3) # imgInit 파일에 원을 그려넣음.
     
-cv.imshow("circle",imgInit)
-cv.waitKey(0)
-=======
     # 원을 잘 감지했는지 visualiaze 하는 코드입니다.
     for i in range(len(keyPoints)):
         keypoint = keyPoints[i]
@@ -60,7 +48,6 @@ cv.waitKey(0)
     #cv.imshow(str(j),imgInit)
     
     #cv.waitKey(0)
->>>>>>> 58e97d3ffa8b8d2d734f1858dcef196635d469d8
 
 ############################################################################################################
 #2D 좌표
