@@ -41,10 +41,11 @@ for i in range(len(keyPoints)):
     s = keypoint.size
     r = int(math.floor(s / 2))
     cv.circle(imgInit, (x, y), r, (256, 200, 0), 3) # imgInit 파일에 원을 그려넣음.
-
+    
 cv.imshow("circle",imgInit)
 cv.waitKey(0)
 
+############################################################################################################
 #2D 좌표
 points2Ds =[]
 
