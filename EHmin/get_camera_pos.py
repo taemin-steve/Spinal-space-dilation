@@ -1,23 +1,25 @@
 import cv2
 import numpy as np
 
+'''
+solvePnP : Nx3x1 or Nx1x3 형태의 object, image point를 가져야한다구 함.
+그래서 (5,7,1,2) -> (35,1,2)
+       (5,7,1,3) -> (35,1,3) 형태로 바꿔서 solvePNP 진행.
+어차피 짝이 다 맞다구 생각해서 괜찮을거라구 생각함~!
+'''
+
 
 # ----------------------------------get 2D points by textfile--------------------------------------
 imgp =[]
 
 with open('./sub_info/circle_pos_noneBlank.txt', 'r') as file:
-    point2D = []
     count = 0
     for line in file:
         count += 1
         lineList = line.strip().split() 
         lineList=[float(i) for i in lineList] # str to float
-        point2D.append([lineList])
-        if count == 7:
-            imgp.append(np.array(point2D).astype(np.float32))
-            point2D = []
-            count = 0
-imgp = np.array(imgp,dtype=np.float32)    
+        imgp.append([lineList])
+imgp=np.array(imgp,dtype=np.float32)
 #------------------------------------------------------------------------------------------------------
 
 # ----------------------------------get 3D points by textfile--------------------------------------
@@ -26,7 +28,6 @@ objp = []
 for i in range(5):
     with open('./sub_info/3D_coordinate/rigidbody_' + str(i +1) + '.txt', 'r') as file:
         flag = False
-        point3D = []
         count = 0 
         for line in file:
             if line.strip() == 'real_ref2':
@@ -35,10 +36,8 @@ for i in range(5):
             if(flag and count < 7):
                 lineList = line.strip().split() 
                 lineList=[float(i) for i in lineList] # str to float
-                point3D.append([lineList])
-                #print(point3D)
+                objp.append([lineList])
                 count += 1 
-        objp.append(np.array(point3D).astype(np.float32))
 objp = np.array(objp,dtype=np.float32) 
 
 #------------------------------------------------------------------------------------------------------
@@ -57,9 +56,12 @@ K = [ fx, s, cx]
 K = np.array([[FX, 0, CX], [0, FY, CY], [0, 0, 1]], dtype=np.float32)
 dist = np.array([0, 0, 0, 0], dtype=np.float32)
 
+print(objp[::])
 # solvePnP 함수 호출
-retval, rvec, tvec = cv2.solvePnP(objp, imgp, K, dist,flags=cv2.SOLVEPNP_ITERATIVE)
+for i in range(5):
+    retval, rvec, tvec = cv2.solvePnP(objp[5*i+5::], imgp[5*i+5::], K, dist,flags=cv2.SOLVEPNP_ITERATIVE)
 
-# rvec와 tvec 출력
-print("rvec = ", rvec)
-print("tvec = ", tvec)
+    # rvec와 tvec 출력
+    print("rvec = ", rvec)
+    print("tvec = ", tvec)
+
