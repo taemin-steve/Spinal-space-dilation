@@ -59,7 +59,7 @@ dist = np.array([0, 0, 0, 0], dtype=np.float32)
 print(objp[::])
 # solvePnP 함수 호출
 for i in range(5):
-    retval, rvec, tvec = cv2.solvePnP(objp[7*i+7::], imgp[7*i+7::], K, dist,flags=cv2.SOLVEPNP_ITERATIVE)
+    retval, rvec, tvec = cv2.solvePnP(objp[7*i:7*i+7][::], imgp[7*i:7*i+7], K, dist,flags=cv2.SOLVEPNP_ITERATIVE)
 
     # rvec와 tvec 출력
     print("rvec = ", rvec)
