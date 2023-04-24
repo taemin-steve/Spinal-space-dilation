@@ -57,9 +57,10 @@ K = np.array([[FX, 0, CX], [0, FY, CY], [0, 0, 1]], dtype=np.float32)
 dist = np.array([0, 0, 0, 0], dtype=np.float32)
 
 # solvePnP 함수 호출
-retval, rvec, tvec = cv2.solvePnP(objp, imgp, K, dist,flags=cv2.SOLVEPNP_ITERATIVE)
+for i in range(5):
+    retval, rvec, tvec = cv2.solvePnP(objp[5*i+5::], imgp[5*i+5::], K, dist,flags=cv2.SOLVEPNP_ITERATIVE)
 
-# rvec와 tvec 출력
-print("rvec = ", rvec)
-print("tvec = ", tvec)
+    # rvec와 tvec 출력
+    print("rvec"+str(i)+" = \n", rvec)
+    print("tvec"+str(i)+" = \n", tvec)
 
