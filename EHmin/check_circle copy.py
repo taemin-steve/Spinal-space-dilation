@@ -44,13 +44,13 @@ for j in range(17):
         y = int(keypoint.pt[1])
         s = keypoint.size
         r = int(math.floor(s / 2))
-        cv.circle(imgInit, (x, y), r, (256, 200, 0), 3) # draw circle
+        cv.circle(imgInit, (x, y), r, (0, 0, 0), 3) # draw circle
         # cv.putText(imgInit, str(x) + "," + str(y),(x,y), fontFace, fontScale, color, thickness, lineType)
         # print(x,y)
     print(len(keyPoints))
     print()
     if j == 14:
-        cv.circle(imgInit, (51, 1185), 32, (256, 200, 0), 3)
+        cv.circle(imgInit, (51, 1185), 32, (0, 0, 0), 3)
     # cv.imshow(str(j),imgInit) # visualize 
     cv.imwrite('./perfect_circle/'+str(j) + '.png', imgInit)
     cv.waitKey(0)
