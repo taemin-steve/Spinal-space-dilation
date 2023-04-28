@@ -9,7 +9,7 @@ solvePnP : Nx3x1 or Nx1x3 형태의 object, image point를 가져야한다구 �
 '''
 
 
-# ----------------------------------get 2D points by textfile---------------------------------------
+# ----------------------------------get 2D points by textfile--------------------------------------
 imgp =[]
 
 with open('./sub_info/circle_pos_noneBlank.txt', 'r') as file:
