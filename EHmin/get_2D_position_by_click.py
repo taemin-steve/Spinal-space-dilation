@@ -2,6 +2,7 @@ import numpy as np
 import cv2 as cv
 import math
 
+#-------------------- detector hyperparameter ------------------------------
 params = cv.SimpleBlobDetector_Params()
 params.filterByArea = True
 params.filterByCircularity = True
@@ -14,14 +15,32 @@ params.minCircularity = 0.01 # 1 >> it detects perfect circle. Minimum size of c
 params.minInertiaRatio = 0.2 # 1 >> it detects perfect circle. short/long axis
 params.minRepeatability = 3
 params.minDistBetweenBlobs = 0.01
+#-------------------------------------------------------------------------
 
-######## for text
+#-------------------- text hyperparameter ------------------------------
 fontFace = cv.FONT_HERSHEY_SIMPLEX
 fontScale = 0.5
 color = (255, 0, 0)
 thickness = 2
 lineType = cv.LINE_AA
-##########
+#-------------------------------------------------------------------------
+
+current_2D_pos = []
+sorted_position = []
+
+def mouse_click(event, x, y, flags, param):
+    if event == cv.EVENT_LBUTTONDOWN:
+        print(current_2D_pos)
+        distance_between_circle2mouse = []
+        for circle_x, circle_y in current_2D_pos:
+            distance_between_circle2mouse.append((circle_x - x)**2 + (circle_y - y)**2)
+        min_value = min(distance_between_circle2mouse)
+        min_index = distance_between_circle2mouse.index(min_value)
+        print(current_2D_pos[min_index])
+        sorted_position.append(current_2D_pos[min_index])
+
+
+#---------------------------------------------------------------------------------------------
 # create detector
 detector = cv.SimpleBlobDetector_create(params)
     
@@ -37,18 +56,36 @@ for j in range(4):
     keyPoints = detector.detect(imgInit)
     print(j)
     # visualize circle in original image
+    
+    
     for i in range(len(keyPoints)):
         keypoint = keyPoints[i]
-
+        
         x = int(keypoint.pt[0])
         y = int(keypoint.pt[1])
         s = keypoint.size
         r = int(math.floor(s / 2))
-        cv.circle(imgInit, (x, y), r, (256, 200, 0), 3) # draw circle
+        
+        # draw circle
+        cv.circle(imgInit, (x, y), r, (256, 200, 0), 3) 
         cv.putText(imgInit, str(x) + "," + str(y),(x,y), fontFace, fontScale, color, thickness, lineType)
-        print(x,y)
-    cv.imshow(str(j),imgInit) # visualize 
+        current_2D_pos.append([x,y])
+        
+    # visualize 
+    cv.imshow(str(j),imgInit) 
+    cv.setMouseCallback(str(j), mouse_click)
     cv.waitKey(0)
+    
+    # Open a file for writing
+    with open("./EHmin/" + str(j) + "_2D_position.txt", "w") as f:
+        for row in sorted_position:
+            for item in row:
+                f.write(str(item) + " ")
+            f.write("\n")
+        
+    current_2D_pos.clear()
+    sorted_position.clear()
+    
     
 cv.waitKey(0)
 
