@@ -30,7 +30,7 @@ sorted_position = []
 
 def mouse_click(event, x, y, flags, param):
     if event == cv.EVENT_LBUTTONDOWN:
-        print(current_2D_pos)
+        # print(current_2D_pos)
         distance_between_circle2mouse = []
         for circle_x, circle_y in current_2D_pos:
             distance_between_circle2mouse.append((circle_x - x)**2 + (circle_y - y)**2)
