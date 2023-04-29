@@ -13,10 +13,10 @@ params.filterByCircularity = True
 params.filterByConvexity = False
 params.filterByInertia = True
 params.filterByColor = False
-params.minArea = 3000 # The size of the blob filter to be applied. If the corresponding value is increased, small circles are not detected. 
-params.maxArea = 80000
+params.minArea = 600 # The size of the blob filter to be applied. If the corresponding value is increased, small circles are not detected. 
+params.maxArea = 8000
 params.minCircularity = 0.01 # 1 >> it detects perfect circle. Minimum size of center angle
-params.minInertiaRatio = 0.2 # 1 >> it detects perfect circle. short/long axis
+params.minInertiaRatio = 0.01 # 1 >> it detects perfect circle. short/long axis
 params.minRepeatability = 3
 params.minDistBetweenBlobs = 0.01
 
@@ -26,8 +26,8 @@ detector = cv.SimpleBlobDetector_create(params)
 PATTERN_SIZE = (8,8) # 18 circle exist
 UNIT_SIZE = 15.9375 # distance between circles // unit is millimeter
 
-for j in range(15):
-    IMG_PATH ='./newData/'+ str(7063+ j + 1)+ '.png'
+for j in range(17):
+    IMG_PATH ='./perfect_circle/'+ str(j)+ '.png'
     imgInit = cv.imread(IMG_PATH,cv.IMREAD_GRAYSCALE)
     H, W = imgInit.shape[:2] 
 
@@ -52,8 +52,8 @@ for j in range(15):
 #2D 좌표
 points2Ds =[]
 
-for i in range(15):
-    IMG_PATH ='./newData/'+ str(7063 + i )+ '.png'
+for i in range(17):
+    IMG_PATH ='./perfect_circle/'+ str(i)+ '.png'
     img_gray = cv.imread(IMG_PATH, cv.IMREAD_GRAYSCALE)
     # circle 좌표를 찾음
     ret, corners = cv.findCirclesGrid(img_gray,PATTERN_SIZE,flags=cv.CALIB_CB_SYMMETRIC_GRID+cv.CALIB_CB_CLUSTERING,blobDetector=detector)
@@ -66,9 +66,9 @@ for i in range(15):
 pattern_points = np.zeros((PATTERN_SIZE[0] * PATTERN_SIZE[1], 3), np.float32)
 pattern_points[:, :2] = np.indices(PATTERN_SIZE).T.reshape(-1, 2)
 pattern_points *= UNIT_SIZE
-points3Ds = [pattern_points for i in range(15)]
+points3Ds = [pattern_points for i in range(17)]
 
-'''
+
 # -------------------- 원 잘 그려졌는지 판별하는 코드
 fontFace = cv.FONT_HERSHEY_SIMPLEX
 fontScale = 1
@@ -78,7 +78,7 @@ lineType = cv.LINE_AA
 
 imgColor = cv.imread(IMG_PATH)
 
-for j in range(18): # 원의 개수만큼 그린당.
+for j in range(64): # 원의 개수만큼 그린당.
     # draw the center of the circle, it is original
     x = int(points2Ds[0][j][0][0])
     y = int(points2Ds[0][j][0][1])
@@ -88,7 +88,7 @@ for j in range(18): # 원의 개수만큼 그린당.
 
 cv.imshow("detect",imgColor)
 cv.waitKey(0)
-'''
+
 
 # ------------ Camera calibrate
 rms_err, mtx, dist, rvecs, tvecs = cv.calibrateCamera(points3Ds, points2Ds, (W, H), None, None)   
@@ -105,7 +105,7 @@ thickness = 2
 lineType = cv.LINE_AA
 
 # reprojection output - 1번째 사진만.
-img_rePro = cv.imread('./circle_images/1_Color.png')
+img_rePro = cv.imread('./perfect_circle/0.png')
 mean_error=0
 # 3D 공간의 점을 2d 이미지로 reprojection.
 # imgpoints2는 tuple형식. shape : ( N, 1, 2 ), N은 3d point의 개수. 
