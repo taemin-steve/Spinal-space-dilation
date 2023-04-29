@@ -1,3 +1,4 @@
+################ for make perfect circle, because there was word in images #####################
 import numpy as np
 import cv2 as cv
 import math
