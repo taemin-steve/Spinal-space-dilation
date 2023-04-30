@@ -1,6 +1,8 @@
 import cv2 as cv
 import math
 
+# SimpleBlobDetecor 를 생성하고 관리하는 클래스입니다.
+# parameter 값을 적는게 너무나두 귀찮아서 클래스로 관리하려구 만들었슴돠.
 class CPdetect:
     def __init__(self):
         self.detecor=self.createBlobDetector() # detector 생성.
