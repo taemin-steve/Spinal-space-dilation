@@ -4,19 +4,6 @@ import math
 class CPdetect:
     def __init__(self):
         self.detecor=self.createBlobDetector() # detector 생성.
-    
-    def detect_circles(self,img):
-        KeyPoints = self.detecor.detect(img)
-        
-        for i in range(len(KeyPoints)):
-            keypoint = KeyPoints[i]
-            s = keypoint.size
-            radius = int(math.floor(s / 2)) #반지름 값.
-    
-            x = int(keypoint.pt[0]) #x 좌표
-            y = int(keypoint.pt[1]) #y 좌표
-        cv.circle(img, (x, y), radius, (256, 200, 0), 3) # draw circle
-        #cv.putText(img, str(x) + "," + str(y),(x,y), fontFace, fontScale, color, thickness, lineType)
         
     def createBlobDetector(self):
         params = cv.SimpleBlobDetector_Params()
@@ -29,6 +16,19 @@ class CPdetect:
         
         return detector
 
+    # 미완성 함수
+    def detect_circles(self,img):
+        KeyPoints = self.detecor.detect(img)
+        
+        for i in range(len(KeyPoints)):
+            keypoint = KeyPoints[i]
+            s = keypoint.size
+            radius = int(math.floor(s / 2)) #반지름 값.
+    
+            x = int(keypoint.pt[0]) #x 좌표
+            y = int(keypoint.pt[1]) #y 좌표
+        cv.circle(img, (x, y), radius, (256, 200, 0), 3) # draw circle
+        #cv.putText(img, str(x) + "," + str(y),(x,y), fontFace, fontScale, color, thickness, lineType)
    
 '''
 [params default Value]
