@@ -24,7 +24,7 @@ color = (255, 0, 0)
 thickness = 2
 lineType = cv.LINE_AA
 #-------------------------------------------------------------------------
-
+#------------------Mouse Click Event--------------------------------------
 current_2D_pos = []
 sorted_position = []
 
@@ -38,17 +38,16 @@ def mouse_click(event, x, y, flags, param):
         min_index = distance_between_circle2mouse.index(min_value)
         print(current_2D_pos[min_index])
         sorted_position.append(current_2D_pos[min_index])
-
-
 #---------------------------------------------------------------------------------------------
-# create detector
+
+#------------------ create detector ------------------------------------------------
 detector = cv.SimpleBlobDetector_create(params)
     
 PATTERN_SIZE = (6,3) # 18 circle exist
 UNIT_SIZE = 47.8125 # distance between circles // unit is millimeter
 
-for j in range(4):
-    IMG_PATH ='./newData/'+ str(j + 1 + 7080 )+ '.png'
+for j in range(21):
+    IMG_PATH ='./c-arm 2023-05-09/'+ str(j + 7817 )+ '.png'
     imgInit = cv.imread(IMG_PATH,cv.IMREAD_GRAYSCALE)
     H, W = imgInit.shape[:2] 
 
@@ -77,11 +76,17 @@ for j in range(4):
     cv.waitKey(0)
     
     # Open a file for writing
-    with open("./EHmin/" + str(j) + "_2D_position.txt", "w") as f:
-        for row in sorted_position:
-            for item in row:
-                f.write(str(item) + " ")
-            f.write("\n")
+    # with open("./EHmin/" + str(j) + "_2D_position.txt", "w") as f:
+    #     for row in sorted_position:
+    #         for item in row:
+    #             f.write(str(item) + " ")
+    #         f.write("\n")
+            
+    ## save file by cv2.FileStorage()        
+    fs = cv.FileStorage("./EHmin/xml/" + str(j + 7817 )+ '.xml', cv.FILE_STORAGE_WRITE)
+    fs.write("my_data", str(np.array(sorted_position)))
+    fs.release()
+
         
     current_2D_pos.clear()
     sorted_position.clear()
