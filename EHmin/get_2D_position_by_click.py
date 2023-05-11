@@ -47,7 +47,8 @@ PATTERN_SIZE = (6,3) # 18 circle exist
 UNIT_SIZE = 47.8125 # distance between circles // unit is millimeter
 
 for j in range(21):
-    IMG_PATH ='./c-arm 2023-05-09/'+ str(j + 7817 )+ '.png'
+    # IMG_PATH ='./c-arm 2023-05-09/'+ str(j + 7802 )+ '.png'
+    IMG_PATH ='./c-arm 2023-05-09/remake'+ str(7806)+ '.png'
     imgInit = cv.imread(IMG_PATH,cv.IMREAD_GRAYSCALE)
     H, W = imgInit.shape[:2] 
 
@@ -82,8 +83,9 @@ for j in range(21):
     #             f.write(str(item) + " ")
     #         f.write("\n")
             
-    ## save file by cv2.FileStorage()        
-    fs = cv.FileStorage("./EHmin/xml/" + str(j + 7817 )+ '.xml', cv.FILE_STORAGE_WRITE)
+    # save file by cv2.FileStorage()        
+    # fs = cv.FileStorage("./EHmin/xml/" + str(j + 7817 )+ '.xml', cv.FILE_STORAGE_WRITE)
+    fs = cv.FileStorage("./EHmin/xml/" + str(7806)+ '.xml', cv.FILE_STORAGE_WRITE)
     fs.write("my_data", str(np.array(sorted_position)))
     fs.release()
 
