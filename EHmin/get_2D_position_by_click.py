@@ -2,7 +2,7 @@ import numpy as np
 import cv2 as cv
 import math
 from PIL import Image
-#-------------------- detector hyperparameter ------------------------------
+#-------------------- detector hyperparameter -----------------------------
 params = cv.SimpleBlobDetector_Params()
 params.filterByArea = True
 params.filterByCircularity = True
