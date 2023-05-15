@@ -1,2 +1,8 @@
 %YAML:1.0
 ---
+circle_center_pos: !!opencv-matrix
+   rows: 7
+   cols: 2
+   dt: i
+   data: [ 119, 998, 702, 1245, 510, 915, 47, 766, 331, 691, 702, 688,
+       98, 1248 ]

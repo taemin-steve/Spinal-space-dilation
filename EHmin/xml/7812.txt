@@ -1,8 +1,8 @@
 %YAML:1.0
 ---
-my_data: !!opencv-matrix
+circle_center_pos: !!opencv-matrix
    rows: 7
    cols: 2
    dt: i
-   data: [ 419, 755, 1115, 975, 865, 677, 327, 551, 648, 483, 1066, 476,
+   data: [ 419, 756, 1115, 976, 865, 676, 327, 551, 647, 481, 1067, 474,
        407, 985 ]

@@ -2,6 +2,7 @@ import numpy as np
 import cv2 as cv
 import math
 from PIL import Image
+import glob
 #-------------------- detector hyperparameter -----------------------------
 params = cv.SimpleBlobDetector_Params()
 params.filterByArea = True
@@ -20,7 +21,7 @@ params.minDistBetweenBlobs = 0.01
 #-------------------- text hyperparameter ------------------------------
 fontFace = cv.FONT_HERSHEY_SIMPLEX
 fontScale = 0.5
-color = (255, 0, 0)
+color = (255, 255, 255)
 thickness = 2
 lineType = cv.LINE_AA
 #-------------------------------------------------------------------------
@@ -46,17 +47,27 @@ detector = cv.SimpleBlobDetector_create(params)
 PATTERN_SIZE = (6,3) # 18 circle exist
 UNIT_SIZE = 47.8125 # distance between circles // unit is millimeter
 
-for j in range(1):
-    # IMG_PATH ='./c-arm 2023-05-09/'+ str(j + 7806 )+ '.png'
-    IMG_PATH ='./c-arm 2023-05-09/remake'+ str(7823)+ '.png'
-    imgInit = cv.imread(IMG_PATH,cv.IMREAD_GRAYSCALE)
-    H, W = imgInit.shape[:2] 
+IMG_PATH_PRE = "./preprocessed_by_SAM/*.png"
+image_names_pre = glob.glob(IMG_PATH_PRE)
+print(image_names_pre)
 
+IMG_PATH_ORI = "./c-arm 2023-05-09/*.png"
+image_names_ori = glob.glob(IMG_PATH_ORI)
+print(image_names_ori)
+
+for j in range(len(image_names_pre)):
+    
+    imgPre = cv.imread(image_names_pre[j],cv.IMREAD_GRAYSCALE)
+    H, W = imgPre.shape[:2] 
+
+    img_name = image_names_pre[j].split("\\")
     # detected circle
-    keyPoints = detector.detect(imgInit)
-    print(j)
+    keyPoints = detector.detect(imgPre)
+    print(img_name[1])
     # visualize circle in original image
     
+    imgOri = cv.imread(image_names_ori[j],cv.IMREAD_GRAYSCALE)
+    imgOri = cv.cvtColor(imgOri, cv.COLOR_BGR2RGB)
     
     for i in range(len(keyPoints)):
         keypoint = keyPoints[i]
@@ -67,26 +78,21 @@ for j in range(1):
         r = int(math.floor(s / 2))
         
         # draw circle
-        cv.circle(imgInit, (x, y), r, (256, 200, 0), 3) 
-        cv.putText(imgInit, str(x) + "," + str(y),(x,y), fontFace, fontScale, color, thickness, lineType)
+        cv.circle(imgOri, (x, y), r, (0, 0, 255), 1) 
+        cv.putText(imgOri, str(x) + "," + str(y),(x,y), fontFace, fontScale, color, thickness, lineType)
         current_2D_pos.append([x,y])
         
     # visualize 
-    cv.imshow(str(j),imgInit) 
-    cv.setMouseCallback(str(j), mouse_click)
+    cv.imshow(img_name[1],imgOri) 
+    cv.setMouseCallback(img_name[1], mouse_click)
     cv.waitKey(0)
     
-    # Open a file for writing
-    # with open("./EHmin/" + str(j) + "_2D_position.txt", "w") as f:
-    #     for row in sorted_position:
-    #         for item in row:
-    #             f.write(str(item) + " ")
-    #         f.write("\n")
             
     # save file by cv2.FileStorage()        
     # fs = cv.FileStorage("./EHmin/xml/" + str(j + 7817)+'.txt', cv.FILE_STORAGE_WRITE)
-    fs = cv.FileStorage("./EHmin/xml/" + str(7823) +'.txt', cv.FILE_STORAGE_WRITE)
-    fs.write("my_data", np.array(sorted_position))
+    fs_name = img_name[1].split(".")
+    fs = cv.FileStorage("./EHmin/xml/" + fs_name[0] +'.txt', cv.FILE_STORAGE_WRITE)
+    fs.write("circle_center_pos", np.array(sorted_position))
     fs.release()
 
         
