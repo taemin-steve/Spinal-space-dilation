@@ -82,9 +82,9 @@ for j in range(64): # 원의 개수만큼 그린당.
     # draw the center of the circle, it is original
     x = int(points2Ds[0][j][0][0])
     y = int(points2Ds[0][j][0][1])
-    cv.circle(imgInit,(x,y),2,(0,0,255),3)
+    # cv.circle(imgInit,(x,y),2,(0,0,255),3)
     color=(0,0,255)
-    cv.putText(imgColor, str(j)+ "th point",(x,y), fontFace, fontScale, color, thickness, lineType)
+    # cv.putText(imgColor, str(j)+ "th point",(x,y), fontFace, fontScale, color, thickness, lineType)
 
 cv.imshow("detect",imgColor)
 cv.waitKey(0)
@@ -99,7 +99,7 @@ print("distortion coefficients: ", dist.ravel()) # 왜곡 계수 출력
 
 
 fontFace = cv.FONT_HERSHEY_SIMPLEX
-fontScale = 1
+fontScale = 0.5
 color = (0, 255, 0)
 thickness = 2
 lineType = cv.LINE_AA
@@ -110,7 +110,7 @@ mean_error=0
 # 3D 공간의 점을 2d 이미지로 reprojection.
 # imgpoints2는 tuple형식. shape : ( N, 1, 2 ), N은 3d point의 개수. 
 imgpoints2,_ = cv.projectPoints(points3Ds[0],rvecs[0],tvecs[0],mtx,dist)
-
+my_error = 0
 for j in range(len(imgpoints2)): # 원의 개수만큼 그린당.
     # draw the center of the circle, it is original
     '''
@@ -120,25 +120,27 @@ for j in range(len(imgpoints2)): # 원의 개수만큼 그린당.
     color=(0,0,255)
     cv.putText(imgColor, str(j)+ "th point",(x,y), fontFace, fontScale, color, thickness, lineType)
     '''
-    
+    my_error += math.sqrt(((points2Ds[0][j][0][0] - imgpoints2[j][0][0])**2) + ((points2Ds[0][j][0][1] - imgpoints2[j][0][1])**2))
     p_x = int(imgpoints2[j][0][0])
     p_y =int(imgpoints2[j][0][1])
     cv.circle(img_rePro ,(p_x,p_y),2,(0,255,0),3)
     color = (0, 255, 0)
     cv.putText(img_rePro , str(j)+ "th point",(p_x,p_y), fontFace, fontScale, color, thickness, lineType)
+my_error = my_error/len(imgpoints2)
+print(my_error)
 
 cv.imshow('detected circles' + str(i + 1),img_rePro )
 cv.waitKey(0)
 error = cv.norm(points2Ds[0],imgpoints2,cv.NORM_L2)/len(imgpoints2)
+# error = math.sqrt(((points2Ds[0][0] - imgpoints2[0]) ** 2) +((points2Ds[0][1] - imgpoints2[1]) ** 2))/len(imgpoints2)
 mean_error += error
-
 print("Total error : {0}".format(mean_error/len(points3Ds)))
 
 
 
-
-'''
 newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (W,H), 1, (W,H))
+print('newcameramtx')
+print(newcameramtx)
 
 
 # undistort
@@ -146,4 +148,4 @@ dst = cv.undistort(imgColor, mtx, dist, None,mtx)
 cv.imshow("dist",imgColor)
 cv.imshow("undist", dst)
 cv.waitKey(0)
-'''
+

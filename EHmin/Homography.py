@@ -9,6 +9,9 @@ MIN_MATCH_COUNT = 10
 img1 = cv.imread('./test5.png', cv.IMREAD_GRAYSCALE)          # queryImage
 img2 = cv.imread('./test6.png', cv.IMREAD_GRAYSCALE) # trainImage
 # Initiate SIFT detector
+# img1 = cv.resize(img1, [100,100])
+# img2 = cv.resize(img2, [100,100])
+
 sift = cv.SIFT_create()
 # find the keypoints and descriptors with SIFT
 kp1, des1 = sift.detectAndCompute(img1,None)
