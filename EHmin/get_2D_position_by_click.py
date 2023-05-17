@@ -47,11 +47,11 @@ detector = cv.SimpleBlobDetector_create(params)
 PATTERN_SIZE = (6,3) # 18 circle exist
 UNIT_SIZE = 47.8125 # distance between circles // unit is millimeter
 
-IMG_PATH_PRE = "./preprocessed_by_SAM/*.png"
+IMG_PATH_PRE = "./undist_mask/*.png"
 image_names_pre = glob.glob(IMG_PATH_PRE)
 print(image_names_pre)
 
-IMG_PATH_ORI = "./c-arm 2023-05-09/*.png"
+IMG_PATH_ORI = "./undist/*.png"
 image_names_ori = glob.glob(IMG_PATH_ORI)
 print(image_names_ori)
 
@@ -72,15 +72,16 @@ for j in range(len(image_names_pre)):
     for i in range(len(keyPoints)):
         keypoint = keyPoints[i]
         
-        x = int(keypoint.pt[0])
-        y = int(keypoint.pt[1])
+        x = round(keypoint.pt[0])
+        y = round(keypoint.pt[1])
         s = keypoint.size
         r = int(math.floor(s / 2))
         
         # draw circle
         cv.circle(imgOri, (x, y), r, (0, 0, 255), 1) 
         cv.putText(imgOri, str(x) + "," + str(y),(x,y), fontFace, fontScale, color, thickness, lineType)
-        current_2D_pos.append([x,y])
+        current_2D_pos.append([keypoint.pt[0],keypoint.pt[1]])
+        
         
     # visualize 
     cv.imshow(img_name[1],imgOri) 
@@ -91,8 +92,8 @@ for j in range(len(image_names_pre)):
     # save file by cv2.FileStorage()        
     # fs = cv.FileStorage("./EHmin/xml/" + str(j + 7817)+'.txt', cv.FILE_STORAGE_WRITE)
     fs_name = img_name[1].split(".")
-    fs = cv.FileStorage("./EHmin/xml/" + fs_name[0] +'.txt', cv.FILE_STORAGE_WRITE)
-    fs.write("circle_center_pos", np.array(sorted_position))
+    fs = cv.FileStorage("./EHmin/undist_text/" + fs_name[0] +'.txt', cv.FILE_STORAGE_WRITE)
+    fs.write("undist_circle_center_pos", np.array(sorted_position))
     fs.release()
 
         
