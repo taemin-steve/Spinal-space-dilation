@@ -1,40 +1,96 @@
 import numpy as np
 import cv2 as cv
+import math
+from PIL import Image
+import glob
+#-------------------- detector hyperparameter -----------------------------
+params = cv.SimpleBlobDetector_Params()
+params.filterByArea = True
+params.filterByCircularity = True
+params.filterByConvexity = False
+params.filterByInertia = True
+params.filterByColor = False
+params.minArea = 3000 # The size of the blob filter to be applied. If the corresponding value is increased, small circles are not detected. 
+params.maxArea = 80000
+params.minCircularity = 0.01 # 1 >> it detects perfect circle. Minimum size of center angle
+params.minInertiaRatio = 0.2 # 1 >> it detects perfect circle. short/long axis
+params.minRepeatability = 3
+params.minDistBetweenBlobs = 0.01
+#-------------------------------------------------------------------------
 
-
-img_list = []
-points_array_2d = []
+#-------------------- text hyperparameter ------------------------------
 fontFace = cv.FONT_HERSHEY_SIMPLEX
-fontScale = 1
-color = (0, 255, 0)
+fontScale = 0.5
+color = (255, 255, 255)
 thickness = 2
 lineType = cv.LINE_AA
-for i in range(10):
-    # road image 
-    img = cv.imread('C:/AR/Augmented-Reality/circle_images/' + str(i + 1)+ '_Color.png', cv.IMREAD_GRAYSCALE)
-    img = cv.medianBlur(img,5)
-    cimg = cv.cvtColor(img,cv.COLOR_GRAY2BGR)
-    circles = cv.HoughCircles(img,cv.HOUGH_GRADIENT,1,50,param1=50,param2=30,minRadius=19,maxRadius= 30)
-    circles = np.uint16(np.around(circles))
-    center_pos_list = []
-    for j in circles[0,:]:
-        # draw the outer circle
-        cv.circle(cimg,(j[0],j[1]),j[2],(0,255,0),2)
-        # draw the center of the circle
-        cv.circle(cimg,(j[0],j[1]),2,(0,0,255),3)
-        # save center of the circle
-        center_pos_list.append([j[0],j[1]])
-        cv.putText(cimg, str(j[0]) + "," + str(j[1]),(j[0],j[1]), fontFace, fontScale, color, thickness, lineType)
+#-------------------------------------------------------------------------
+#------------------Mouse Click Event--------------------------------------
+current_2D_pos = []
+sorted_position = []
+
+def mouse_click(event, x, y, flags, param):
+    if event == cv.EVENT_LBUTTONDOWN:        
+        sorted_position.append([x,y])
+        
+#---------------------------------------------------------------------------------------------
+
+#------------------ create detector ------------------------------------------------
+# detector = cv.SimpleBlobDetector_create(params)
     
-    cv.imshow('detected circles' + str(i + 1),cimg)
-    print("Centers of " + str(i+1)+".jpg's Circles")
-    for k in center_pos_list:
-        print(k)
-    print(len(center_pos_list))
+# IMG_PATH_PRE = "./undist_mask/*.png"
+# image_names_pre = glob.glob(IMG_PATH_PRE)
+# print(image_names_pre)
+
+# IMG_PATH_ORI = "./undist/*.png"
+# image_names_ori = glob.glob(IMG_PATH_ORI)
+# print(image_names_ori)
+
+# for j in range(len(image_names_pre)):
     
-    points_array_2d.append(center_pos_list)
+#     imgPre = cv.imread(image_names_pre[j],cv.IMREAD_GRAYSCALE)
+#     H, W = imgPre.shape[:2] 
+
+#     img_name = image_names_pre[j].split("\\")
+#     # detected circle
+#     keyPoints = detector.detect(imgPre)
+#     print(img_name[1])
+#     # visualize circle in original image
+    
+#     imgOri = cv.imread(image_names_ori[j],cv.IMREAD_GRAYSCALE)
+#     imgOri = cv.cvtColor(imgOri, cv.COLOR_BGR2RGB)
+    
+#     for i in range(len(keyPoints)):
+#         keypoint = keyPoints[i]
+        
+#         x = round(keypoint.pt[0])
+#         y = round(keypoint.pt[1])
+#         s = keypoint.size
+#         r = int(math.floor(s / 2))
+        
+#         # draw circle
+#         cv.circle(imgOri, (x, y), r, (0, 0, 255), 1) 
+#         cv.putText(imgOri, str(x) + "," + str(y),(x,y), fontFace, fontScale, color, thickness, lineType)
+#         current_2D_pos.append([keypoint.pt[0],keypoint.pt[1]])
+        
+        
+#     # visualize 
+imgOri = cv.imread('./right_undistort.png',cv.IMREAD_GRAYSCALE)
+cv.imshow('0',imgOri) 
+cv.setMouseCallback('0', mouse_click)
 cv.waitKey(0)
-cv.destroyAllWindows()
+    
+            
+    # save file by cv2.FileStorage()        
+    # fs = cv.FileStorage("./EHmin/xml/" + str(j + 7817)+'.txt', cv.FILE_STORAGE_WRITE)
+    # fs_name = img_name[1].split(".")
+fs = cv.FileStorage('./0.txt', cv.FILE_STORAGE_WRITE)
+fs.write("undist_circle_center_pos", np.array(sorted_position))
+fs.release()
 
+        
+current_2D_pos.clear()
+sorted_position.clear()
 
-
+    
+cv.waitKey(0)
