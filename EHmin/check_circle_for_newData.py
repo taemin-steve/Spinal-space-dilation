@@ -48,7 +48,7 @@ for j in range(4):
         cv.putText(imgInit, str(x) + "," + str(y),(x,y), fontFace, fontScale, color, thickness, lineType)
         print(x,y)
     imgInit = cv.resize(imgInit,[700,700])
-    cv.imshow(str(j),imgInit) # visualize 
+    cv.imshow(str(j),imgInit) # visualize .
     cv.waitKey(0)
     
 cv.waitKey(0)
