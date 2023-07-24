@@ -1,0 +1,13 @@
+%YAML:1.0
+---
+g_dp: 1
+g_minDist: 50
+g_param1: 350
+g_param2: 15
+g_minRadius: 20
+g_maxRadius: 40
+l_dp: 1
+l_minDist: 50
+l_param1: 350
+l_param2: 20
+margin: 10
