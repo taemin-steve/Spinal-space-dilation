@@ -57,11 +57,14 @@ for i in range(17):
     img_gray = cv.imread(IMG_PATH, cv.IMREAD_GRAYSCALE)
     # circle 좌표를 찾음
     ret, corners = cv.findCirclesGrid(img_gray,PATTERN_SIZE,flags=cv.CALIB_CB_SYMMETRIC_GRID+cv.CALIB_CB_CLUSTERING,blobDetector=detector)
-    print(len(corners))
+    # print(len(corners))
     if ret:
         points2Ds.append(corners)
         points2Ds[i]=np.flip(points2Ds[i],0)
-    
+        
+print(points2Ds)
+print(type(points2Ds[0]))
+
 # 3D 좌표
 pattern_points = np.zeros((PATTERN_SIZE[0] * PATTERN_SIZE[1], 3), np.float32)
 pattern_points[:, :2] = np.indices(PATTERN_SIZE).T.reshape(-1, 2)

@@ -11,3 +11,14 @@ l_minDist: 50
 l_param1: 350
 l_param2: 20
 margin: 10
+# g_dp: 1
+# g_minDist: 50
+# g_param1: 300
+# g_param2: 10
+# g_minRadius: 10
+# g_maxRadius: 30
+# l_dp: 1
+# l_minDist: 50
+# l_param1: 300
+# l_param2: 20
+# margin: 10

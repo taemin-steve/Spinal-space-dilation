@@ -4,6 +4,7 @@ import numpy as np
 # GET parameter --------------------------------------------------------
 fs = cv2.FileStorage("./EHmin/data.yml", cv2.FILE_STORAGE_READ)
 
+
 # Read the variables from the file
 g_dp = int(fs.getNode("g_dp").real())
 g_minDist = int(fs.getNode("g_minDist").real())
@@ -22,6 +23,8 @@ fs.release()
 
 # Read image--------------------------------------------------------------------------------
 img_path= "./newData/7065.png"
+img_path= "./EHmin/test.jpg"
+
 img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE) # for houghCircle
 
 # add mask 
@@ -76,7 +79,6 @@ if circles is not None:
             # cv2.waitKey()
             new_circle.append(np.array([c[0][0][0] + x - (r+margin), c[0][0][1] + y - (r+margin), c[0][0][2]]))
     
-    print(len(new_circle))
     for (x, y, r) in new_circle:
         cv2.circle(img_ori, (round(x), round(y)), round(r), (0, 0, 255), 2)
     # cv2.namedWindow('Detected Circles', cv2.WINDOW_NORMAL)
@@ -85,7 +87,27 @@ if circles is not None:
     cv2.destroyAllWindows()
 else:
     print("No circles were detected.")
-    
-    
+
+# solvePnp----------------------------------------------------------------------------
+
+PATTERN_SIZE = (8,8) # 18 circle exist
+UNIT_SIZE = 15.9375 # distance between circles // unit is millimeter
+H, W = img.shape[:2] 
+
+
+points2Ds = [np.array([[[i[0], i[1]]] for i in new_circle], np.float32)]
+print(points2Ds)
+
+
+pattern_points = np.zeros((PATTERN_SIZE[0] * PATTERN_SIZE[1], 3), np.float32)
+pattern_points[:, :2] = np.indices(PATTERN_SIZE).T.reshape(-1, 2)
+pattern_points *= UNIT_SIZE
+points3Ds = [pattern_points]
+
+
+rms_err, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(points3Ds, points2Ds, (W, H), None, None)   
+print("\nRMS:", rms_err)
+print("camera intrinsic matrix:\n", mtx)      # 카메라 내부 매트릭스
+print("distortion coefficients: ", dist.ravel()) # 왜곡 계수 출력
 
 
