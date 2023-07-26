@@ -62,9 +62,7 @@ for i in range(17):
         points2Ds.append(corners)
         points2Ds[i]=np.flip(points2Ds[i],0)
         
-print(points2Ds)
-print(type(points2Ds[0]))
-
+print(points2Ds[0])
 # 3D 좌표
 pattern_points = np.zeros((PATTERN_SIZE[0] * PATTERN_SIZE[1], 3), np.float32)
 pattern_points[:, :2] = np.indices(PATTERN_SIZE).T.reshape(-1, 2)
@@ -94,7 +92,10 @@ cv.waitKey(0)
 
 
 # ------------ Camera calibrate
-rms_err, mtx, dist, rvecs, tvecs = cv.calibrateCamera(points3Ds, points2Ds, (W, H), None, None)   
+print(len(points2Ds))
+print(len(points3Ds))
+
+rms_err, mtx, dist, rvecs, tvecs = cv.calibrateCamera(points3Ds[:1], points2Ds[:1], (W, H), None, None)   
 print("\nRMS:", rms_err)
 print("camera intrinsic matrix:\n", mtx)      # 카메라 내부 매트릭스
 print("distortion coefficients: ", dist.ravel()) # 왜곡 계수 출력
