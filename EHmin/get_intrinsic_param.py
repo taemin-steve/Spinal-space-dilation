@@ -97,7 +97,7 @@ print(len(points3Ds))
 
 rms_err, mtx, dist, rvecs, tvecs = cv.calibrateCamera(points3Ds[:1], points2Ds[:1], (W, H), None, None)   
 print("\nRMS:", rms_err)
-print("camera intrinsic matrix:\n", mtx)      # 카메라 내부 매트릭스
+print("camera intrinsic matrix:\n", mtx) # 카메라 내부 매트릭스
 print("distortion coefficients: ", dist.ravel()) # 왜곡 계수 출력
 
 
