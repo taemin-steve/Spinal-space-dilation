@@ -31,7 +31,7 @@ for j in range(17):
     imgInit = cv.imread(IMG_PATH,cv.IMREAD_GRAYSCALE)
     H, W = imgInit.shape[:2] 
 
-    # keyPoints는 detector가 원을 감지한 것
+    # keyPoints는 detector가 원을 감지
     keyPoints = detector.detect(imgInit)
     
     # 원을 잘 감지했는지 visualiaze 하는 코드입니다.
