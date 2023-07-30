@@ -120,3 +120,8 @@ rms_err, mtx, dist, rvecs, tvecs = cv.calibrateCamera(points3Ds, points2Ds, (W, 
 print("\nRMS:", rms_err)
 print("camera intrinsic matrix:\n", mtx) # 카메라 내부 매트릭스
 print("distortion coefficients: ", dist.ravel()) # 왜곡 계수 출력
+
+# Estimate R,T by solvePnp---------------------------------------------------
+retval, rvec, tvec = cv.solvePnP( points3Ds, points2Ds, mtx, dist, None )
+
+print(rvec, tvec)
