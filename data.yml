@@ -1,0 +1,14 @@
+%YAML:1.0
+---
+g_minArea: 600
+g_maxArea: 8000
+g_minCircularity: 1.0000000000000000e-02
+g_minInertiaRatio: 1.0000000000000000e-02
+g_minRepeatability : 3
+g_minDistBetweenBlobs: 1.0000000000000000e-02
+l_minArea: 600
+l_maxArea: 8000
+l_minCircularity: 1.0000000000000000e-02
+l_minInertiaRatio: 1.0000000000000000e-02
+l_minRepeatability : 3
+l_minDistBetweenBlobs: 1.0000000000000000e-02
