@@ -1,7 +1,7 @@
 %YAML:1.0
 ---
-g_minArea: 600
-g_maxArea: 8000
+g_minArea: 2000
+g_maxArea: 12000
 g_minCircularity: 1.0000000000000000e-02
 g_minInertiaRatio: 1.0000000000000000e-02
 g_minRepeatability : 3

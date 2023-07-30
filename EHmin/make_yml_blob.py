@@ -17,6 +17,8 @@ fs = cv2.FileStorage("./EHmin/data_blob.yml", cv2.FILE_STORAGE_WRITE)
 # Global Circle Detection Variables
 fs.write("g_minArea", 600)
 fs.write("g_maxArea", 8000)
+# fs.write("g_minArea", 2000)
+# fs.write("g_maxArea", 12000)
 fs.write("g_minCircularity", 0.01)
 fs.write("g_minInertiaRatio", 0.01)
 fs.write("g_minRepeatability ", 3)
@@ -29,7 +31,7 @@ fs.write("l_minCircularity", 0.01)
 fs.write("l_minInertiaRatio", 0.01)
 fs.write("l_minRepeatability ", 3)
 fs.write("l_minDistBetweenBlobs", 0.01)
-
+fs.write("margin", 10)
 # Close the file
 fs.release()
 
@@ -47,7 +49,6 @@ fs.release()
 # l_minDist = int(fs.getNode("l_minDist").real())
 # l_param1 = int(fs.getNode("l_param1").real())
 # l_param2 = int(fs.getNode("l_param2").real())
-# margin = int(fs.getNode("margin").real())
 
 # # Close the file
 # fs.release()
