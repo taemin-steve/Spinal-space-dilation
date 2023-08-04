@@ -1,8 +1,9 @@
 import cv2 as cv
 import numpy as np
+import math
 
 # Get Params ----------------------------------------------------------------------------
-fs = cv.FileStorage("./EHmin/data_blob.yml", cv.FILE_STORAGE_READ)
+fs = cv.FileStorage("./EHmin/data_blob_test.yml", cv.FILE_STORAGE_READ)
 
 # Read the variables from the file
 g_minArea = int(fs.getNode("g_minArea").real())
@@ -30,21 +31,29 @@ params.filterByConvexity = False
 params.filterByInertia = True
 params.filterByColor = False
 
-PATTERN_SIZE = (8,8) # 18 circle exist
-UNIT_SIZE = 15.9375 # distance between circles // unit is millimeter
+PATTERN_SIZE = (9,9) # 18 circle exist
+UNIT_SIZE = 25 # distance between circles // unit is millimeter
 
 # Image Setting-----------------------------------------------------------------------
 IMG_PATH= "./newData/7065.png"
 # IMG_PATH= "./newData/7081.png"
 # IMG_PATH= "./EHmin/test.jpg"
+IMG_PATH= "./EHmin/Phantom_only.png"
+# IMG_PATH= "./EHmin/AP_view.png"
+
 
 img = cv.imread(IMG_PATH, cv.IMREAD_GRAYSCALE) # for houghCircle
 H, W = img.shape[:2] 
 
 # add mask 
-img[0: 150,0: 250] = 0
+img[0: 150,0: 125] = 0
+img[0: 100,0: 250] = 0
+img[0: 100,img.shape[0] - 100: img.shape[0]] = 0
+
 img[img.shape[0] - 100: img.shape[0], 0: 260] = 0
-img[img.shape[0] - 175: img.shape[0], 0: 135] = 0
+img[img.shape[0] - 125: img.shape[0], 0: 200] = 0
+img[img.shape[0] - 175: img.shape[0], 0: 120] = 0
+cv.namedWindow('masked image', cv.WINDOW_NORMAL)
 cv.imshow('masked image', img)
 
 
@@ -74,6 +83,7 @@ for i in range(len(keyPoints)):
     r = round(s / 2)
     cv.circle(img_global_circle_detection, (x, y), r, (0, 0, 256), 2) # imgInit 파일에 원을 그려넣음.
 
+cv.namedWindow('global_detection', cv.WINDOW_NORMAL)
 cv.imshow('global_detection',img_global_circle_detection)
 cv.waitKey(0)
 
@@ -108,6 +118,8 @@ ret, corners = cv.findCirclesGrid(img,PATTERN_SIZE,flags=cv.CALIB_CB_SYMMETRIC_G
 if ret:
     points2Ds.append(corners)
     points2Ds = np.flip(points2Ds,0)
+    
+print(len(points2Ds))
 
 # 3D Position
 pattern_points = np.zeros((PATTERN_SIZE[0] * PATTERN_SIZE[1], 3), np.float32)
@@ -121,7 +133,8 @@ print("\nRMS:", rms_err)
 print("camera intrinsic matrix:\n", mtx) # 카메라 내부 매트릭스
 print("distortion coefficients: ", dist.ravel()) # 왜곡 계수 출력
 
-# Estimate R,T by solvePnp---------------------------------------------------
-retval, rvec, tvec = cv.solvePnP( points3Ds, points2Ds, mtx, dist, None )
+# # Estimate R,T by solvePnp---------------------------------------------------
+# retval, rvec, tvec = cv.solvePnP( points3Ds, points2Ds, mtx, dist, None )
 
-print(rvec, tvec)
+# print(rvec, tvec)
+

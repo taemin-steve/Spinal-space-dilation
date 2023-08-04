@@ -24,6 +24,8 @@ fs.release()
 # Read image--------------------------------------------------------------------------------
 img_path= "./newData/7065.png"
 img_path= "./EHmin/test.jpg"
+img_path= "./EHmin/Phantom_only.png"
+
 
 img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE) # for houghCircle
 
@@ -31,8 +33,9 @@ img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE) # for houghCircle
 img[0: 150,0: 250] = 0
 img[img.shape[0] - 100: img.shape[0], 0: 260] = 0
 img[img.shape[0] - 175: img.shape[0], 0: 135] = 0
+cv2.namedWindow('masked image', cv2.WINDOW_NORMAL)
 cv2.imshow('masked image', img)
-
+cv2.waitKey()
 
 img_ori = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE) # save original image, draw final circle in here
 img_ori = cv2.cvtColor(img_ori, cv2.COLOR_GRAY2BGR)
